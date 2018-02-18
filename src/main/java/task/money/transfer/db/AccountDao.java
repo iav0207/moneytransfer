@@ -3,6 +3,7 @@ package task.money.transfer.db;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.skife.jdbi.v2.sqlobject.Bind;
+import org.skife.jdbi.v2.sqlobject.GetGeneratedKeys;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.Mapper;
@@ -27,7 +28,7 @@ public interface AccountDao {
         static final String CREATE_TABLE = "create table accounts "
                 + "(id bigint primary key auto_increment, currency int, status varchar(30))";
         static final String DROP_TABLE = "DROP TABLE accounts IF EXISTS";
-        static final String INSERT = "insert into accounts (currency, status) values (:currency, :status)";
+        static final String INSERT = "insert into accounts (id, currency, status) values (default, :currency, :status)";
         static final String FIND_BY_ID = "select id, currency, status from accounts where id = :id";
     }
 
@@ -38,7 +39,8 @@ public interface AccountDao {
     void dropAccountsTableSafely();
 
     @SqlUpdate(SQL.INSERT)
-    Number insert(@Bind(FieldNames.CURRENCY) int currency, @Bind(FieldNames.STATUS) String status);
+    @GetGeneratedKeys
+    long insert(@Bind(FieldNames.CURRENCY) int currency, @Bind(FieldNames.STATUS) String status);
 
     @SqlQuery(SQL.FIND_BY_ID)
     @Mapper(AccountMapper.class)

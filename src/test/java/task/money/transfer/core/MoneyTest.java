@@ -8,6 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotSame;
 
 @ParametersAreNonnullByDefault
 public class MoneyTest {
@@ -43,7 +44,80 @@ public class MoneyTest {
                         Money.valueOf(100.010001, CURR_1),
                         false
                 },
+                {
+                        Money.valueOf("100", CURR_1),
+                        Money.valueOf("100.000", CURR_1),
+                        false
+                },
         };
+    }
+
+    @Test
+    public void testAddImmutability() {
+        BigDecimal firstDec = new BigDecimal("0.3");
+        Money first = Money.valueOf(firstDec, CURR_1);
+        Money second = Money.valueOf(0.1, CURR_1);
+
+        assertNotSame(first, first.add(second));
+        assertEquals(first.bigDecimalValue(), firstDec);
+    }
+
+    @Test
+    public void testAddSymmetry() {
+        Money first = Money.valueOf(0.37, CURR_1);
+        Money second = Money.valueOf(0.11, CURR_1);
+
+        assertEquals(first.add(second), second.add(first));
+    }
+
+    @Test
+    public void testAdd() {
+        BigDecimal firstDec = new BigDecimal("0.37");
+        BigDecimal secondDec = new BigDecimal("0.1101");
+        Money first = Money.valueOf(firstDec, CURR_1);
+        Money second = Money.valueOf(secondDec, CURR_1);
+
+        assertEquals(first.add(second).bigDecimalValue(), firstDec.add(secondDec));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void shouldThrowExceptionOnAddDifferentCurrencies() {
+        Money.valueOf(0.1, CURR_1).add(Money.valueOf(1, CURR_2));
+    }
+
+    @Test
+    public void testSubtractImmutability() {
+        BigDecimal firstDec = new BigDecimal("0.3");
+        Money first = Money.valueOf(firstDec, CURR_1);
+        Money second = Money.valueOf(0.1, CURR_1);
+
+        assertNotSame(first, first.subtract(second));
+        assertEquals(first.bigDecimalValue(), firstDec);
+    }
+
+    @Test
+    public void testSubtract() {
+        BigDecimal firstDec = new BigDecimal("0.37");
+        BigDecimal secondDec = new BigDecimal("0.1101");
+        Money first = Money.valueOf(firstDec, CURR_1);
+        Money second = Money.valueOf(secondDec, CURR_1);
+
+        assertEquals(first.subtract(second).bigDecimalValue(), firstDec.subtract(secondDec));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void shouldThrowExceptionOnSubtractDifferentCurrencies() {
+        Money.valueOf(0.1, CURR_1).add(Money.valueOf(1, CURR_2));
+    }
+
+    @Test
+    public void checkMicroMoneyScaling() {
+        assertEquals(Money.valueOf("100.000000", CURR_1), Money.valueOfMicros(100_000_000, CURR_1));
+    }
+
+    @Test
+    public void checkMicros() {
+        assertEquals(Money.valueOf(10.123_456_789, CURR_1).micros(), 10_123_456);
     }
 
 }

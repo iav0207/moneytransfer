@@ -3,6 +3,7 @@ package task.money.transfer.api;
 import java.util.NoSuchElementException;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.validation.constraints.Min;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
@@ -32,8 +33,10 @@ public class Account {
         }
     }
 
+    @Min(1)
     private long id;
 
+    @Min(1)
     private int currencyCode;
 
     private Status status;
@@ -53,7 +56,7 @@ public class Account {
     }
 
     @JsonProperty
-    public int getCurrencyCode() {
+    public Integer getCurrencyCode() {
         return currencyCode;
     }
 
@@ -63,6 +66,7 @@ public class Account {
     }
 
     @Override
+    @SuppressWarnings("SimplifiableIfStatement")
     public boolean equals(Object o) {
         if (this == o) {
             return true;

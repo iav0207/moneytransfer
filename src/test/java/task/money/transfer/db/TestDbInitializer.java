@@ -24,7 +24,21 @@ public class TestDbInitializer {
 
     private static final DataSourceFactory dataSourceFactory = createDataSourceFactory();
 
-    private static final DBI dbi = new DBIFactory().build(env, dataSourceFactory, "test" );
+    private static final DBI dbi = new DBIFactory().build(env, dataSourceFactory, "test");
+
+    static {
+        AccountDao accounts = dbi.onDemand(AccountDao.class);
+        TransactionDao transactions = dbi.onDemand(TransactionDao.class);
+
+        transactions.dropTransactionsTableSafely();
+        accounts.dropAccountsTableSafely();
+
+        accounts.createTableIfNotExists();
+        transactions.createTableIfNotExists();
+
+        dbi.registerMapper(new AccountMapper());
+        dbi.registerMapper(new TransactionMapper());
+    }
 
     private static DataSourceFactory createDataSourceFactory() {
         DataSourceFactory dataSourceFactory = new DataSourceFactory();

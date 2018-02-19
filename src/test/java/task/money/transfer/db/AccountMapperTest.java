@@ -31,7 +31,7 @@ public class AccountMapperTest {
     @Test
     public void shouldMapAllFields() throws SQLException {
         final long id = 9L;
-        final int currency = 643;
+        final Integer currency = 643;
         final Account.Status status = Account.Status.SUSPENDED;
 
         when(resultSet.getLong(AccountDao.FieldNames.ID)).thenReturn(id);

@@ -1,6 +1,6 @@
 package task.money.transfer.resources;
 
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.validation.Valid;
@@ -28,14 +28,14 @@ public class AccountsResource {
 
     @GET
     public Account getById(@QueryParam("id") long id) {
-        return Optional.ofNullable(dao.findById(id)).orElseThrow(IllegalStateException::new);
+        return dao.findById(id).orElseThrow(NoSuchElementException::new);   // TODO response
     }
 
     @POST
     @Path("/open")
     public Account open(@Valid OpenAccountRequest req) {
         // TODO validate currency code existent
-        long newAccountId = dao.insert(req.getCurrency(), Account.Status.ACTIVE.name());
-        return dao.findById(newAccountId);
+        long newAccountId = dao.createAccount(req.getCurrency());
+        return dao.findById(newAccountId).orElseThrow(IllegalStateException::new);
     }
 }

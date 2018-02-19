@@ -1,7 +1,5 @@
 package task.money.transfer.db;
 
-import java.util.Optional;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.skife.jdbi.v2.sqlobject.Bind;
@@ -48,5 +46,5 @@ public interface AccountDao {
 
     @SqlQuery(SQL.FIND_BY_ID)
     @Mapper(AccountMapper.class)
-    Optional<Account> findById(@Bind(FieldNames.ID) long id);
+    Account findById(@Bind(FieldNames.ID) long id);
 }

@@ -12,6 +12,7 @@ import task.money.transfer.api.Account;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 
 @ParametersAreNonnullByDefault
 public class AccountDaoTest {
@@ -29,7 +30,7 @@ public class AccountDaoTest {
     @Test
     public void insertAndFindById() throws SQLException {
         long id = dao.createAccount(USD);
-        Account account = dao.findById(id).orElseThrow(RuntimeException::new);
+        Account account = dao.findById(id);
 
         assertNotNull(account);
         assertEquals(account.getId(), id);  // mapping is tested separately
@@ -41,6 +42,11 @@ public class AccountDaoTest {
         long second = dao.createAccount(USD);
 
         assertNotEquals(first, second);
+    }
+
+    @Test
+    public void tryGetNonExistentAccount() throws Exception {
+        assertNull(dao.findById(787L));
     }
 
 }

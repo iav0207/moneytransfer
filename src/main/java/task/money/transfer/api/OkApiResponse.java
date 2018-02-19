@@ -5,16 +5,16 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @ParametersAreNonnullByDefault
-public class OkApiResponse<T> extends ApiResponse {
+class OkApiResponse<T> extends ApiResponse {
 
     @JsonProperty
     private T body;
 
-    public OkApiResponse() {
+    OkApiResponse() {
         super(Status.OK);
     }
 
-    public OkApiResponse(T body) {
+    OkApiResponse(T body) {
         this();
         this.body = body;
     }

@@ -38,7 +38,7 @@ public class AccountMapperTest {
         when(resultSet.getInt(AccountDao.FieldNames.CURRENCY)).thenReturn(currency);
         when(resultSet.getString(AccountDao.FieldNames.STATUS)).thenReturn(status.name());
 
-        Account account = mapper.map(0, resultSet, null).orElseThrow(RuntimeException::new);
+        Account account = mapper.map(0, resultSet, null);
 
         SoftAssert softly = new SoftAssert();
         softly.assertEquals(account.getId(), id);

@@ -5,29 +5,29 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @ParametersAreNonnullByDefault
-public class ErrorApiResponse extends ApiResponse {
+class ErrorApiResponse extends ApiResponse {
 
     @JsonProperty
     private int errorCode;
 
     @JsonProperty
-    private String detail;
+    private String message;
 
-    public ErrorApiResponse() {
+    ErrorApiResponse() {
         super(Status.ERROR);
     }
 
-    public ErrorApiResponse(int errorCode, String detail) {
+    ErrorApiResponse(int errorCode, String message) {
         this();
         this.errorCode = errorCode;
-        this.detail = detail;
+        this.message = message;
     }
 
     public int getErrorCode() {
         return errorCode;
     }
 
-    public String getDetail() {
-        return detail;
+    public String getMessage() {
+        return message;
     }
 }

@@ -2,9 +2,10 @@
 
 import logging
 import os
-import requests
 import urllib.parse
 from collections import defaultdict
+
+import requests
 
 config = {
     'base_url': 'http://localhost:8080'
@@ -51,27 +52,31 @@ def run():
     usd = 840
     rub = 643
 
+    log.info('Getting list of supported currencies...')
+
+    get(uri('currencies/list'))
+
     log.info('Opening USD account...')
 
     resp = post(uri('accounts/open'), json={'currency': usd})
-    accounts[usd].append(resp.json())
+    accounts[usd].append(resp.json()['body'])
 
     log.info('Getting just created account...')
 
     resp = get(uri(f'accounts?id={accounts[usd][0]["id"]}'))
-    assert_that('Received account currency is USD', resp.json()['currencyCode'] == usd)
+    assert_that('Received account currency is USD', resp.json()['body']['currencyCode'] == usd)
 
     log.info('Creating another USD account...')
 
     resp = post(uri('accounts/open'), json={'currency': usd})
-    assert_that('Account has different id', resp.json()['id'] != accounts[usd][0]['id'])
+    assert_that('Account has different id', resp.json()['body']['id'] != accounts[usd][0]['id'])
     accounts[usd].append(resp.json())
 
     log.info('Creating RUB account...')
 
     resp = post(uri('accounts/open'), json={'currency': rub})
-    assert_that('Received account currency is RUB', resp.json()['currencyCode'] == rub)
-    accounts[rub].append(resp.json())
+    assert_that('Received account currency is RUB', resp.json()['body']['currencyCode'] == rub)
+    accounts[rub].append(resp.json()['body'])
 
     assert not errors, '\n'.join(errors)
 

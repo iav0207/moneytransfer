@@ -1,6 +1,9 @@
 package task.money.transfer;
 
+import javax.ws.rs.client.Client;
+
 import io.dropwizard.Application;
+import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Environment;
 import org.skife.jdbi.v2.DBI;
@@ -8,6 +11,7 @@ import task.money.transfer.db.AccountDao;
 import task.money.transfer.db.CurrenciesInitializer;
 import task.money.transfer.db.CurrencyDao;
 import task.money.transfer.db.TransactionDao;
+import task.money.transfer.health.ApiHealthCheck;
 import task.money.transfer.health.DatabaseHealthCheck;
 import task.money.transfer.resources.AccountsResource;
 import task.money.transfer.resources.CurrenciesResource;
@@ -45,6 +49,9 @@ public class MoneyApp extends Application<AppConfiguration> {
         env.jersey().register(new AccountsResource(accountDao, currencyDao));
         env.jersey().register(new MoneyResource(accountDao, transactionDao));
         env.jersey().register(new CurrenciesResource(currencyDao));
+
+        Client client = new JerseyClientBuilder(env).build("ApiHealthCheckerClient");
+        env.jersey().register(new ApiHealthCheck(client));
     }
 
 }

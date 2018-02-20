@@ -1,6 +1,5 @@
 package task.money.transfer.api;
 
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import javax.annotation.Nullable;
@@ -24,15 +23,6 @@ public class Transaction {
         DEPOSIT,
         WITHDRAWAL,
         TRANSFER;
-
-        public static Type fromString(String s) {
-            for (Type val : values()) {
-                if (val.name().equalsIgnoreCase(s)) {
-                    return val;
-                }
-            }
-            throw new NoSuchElementException(s);
-        }
 
         @Override
         public String toString() {

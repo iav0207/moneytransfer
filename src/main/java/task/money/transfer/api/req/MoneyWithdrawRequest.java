@@ -1,4 +1,4 @@
-package task.money.transfer.api;
+package task.money.transfer.api.req;
 
 import java.util.Objects;
 
@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 
 @ParametersAreNonnullByDefault
-public class MoneyDepositRequest {
+public class MoneyWithdrawRequest {
 
     @NotNull
     @Min(1)
@@ -22,10 +22,10 @@ public class MoneyDepositRequest {
     @JsonProperty
     private Long amountMicros;
 
-    public MoneyDepositRequest() {
+    public MoneyWithdrawRequest() {
     }
 
-    public MoneyDepositRequest(Long accountId, Long amountMicros) {
+    public MoneyWithdrawRequest(Long accountId, Long amountMicros) {
         this.accountId = accountId;
         this.amountMicros = amountMicros;
     }
@@ -46,7 +46,7 @@ public class MoneyDepositRequest {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        MoneyDepositRequest that = (MoneyDepositRequest) o;
+        MoneyWithdrawRequest that = (MoneyWithdrawRequest) o;
         return Objects.equals(accountId, that.accountId) &&
                 Objects.equals(amountMicros, that.amountMicros);
     }

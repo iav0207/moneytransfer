@@ -1,4 +1,4 @@
-package task.money.transfer.api;
+package task.money.transfer.api.resp;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

@@ -8,12 +8,15 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 import org.joda.time.DateTime;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static com.google.common.base.Preconditions.checkArgument;
 
+@JsonInclude(NON_NULL)
 @ParametersAreNonnullByDefault
 public class Transaction {
 
@@ -55,18 +58,18 @@ public class Transaction {
 
     @NotNull
     @JsonProperty
-    private DateTime happened;
+    private DateTime timestamp;
 
     public Transaction() {
     }
 
-    public Transaction(@Nullable Long sender, @Nullable Long recipient, long amount, DateTime happened) {
+    public Transaction(@Nullable Long sender, @Nullable Long recipient, long amount, DateTime timestamp) {
         checkArgument(sender != null || recipient != null);
 
         this.sender = sender;
         this.recipient = recipient;
         this.amount = amount;
-        this.happened = happened;
+        this.timestamp = timestamp;
 
         if (sender == null) {
             this.type = Type.DEPOSIT;
@@ -93,8 +96,8 @@ public class Transaction {
         return amount;
     }
 
-    public DateTime getHappened() {
-        return happened;
+    public DateTime getTimestamp() {
+        return timestamp;
     }
 
     @Override
@@ -110,12 +113,12 @@ public class Transaction {
                 type == that.type &&
                 Objects.equals(sender, that.sender) &&
                 Objects.equals(recipient, that.recipient) &&
-                Objects.equals(happened, that.happened);
+                Objects.equals(timestamp, that.timestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, sender, recipient, amount, happened);
+        return Objects.hash(type, sender, recipient, amount, timestamp);
     }
 
     @Override
@@ -125,7 +128,7 @@ public class Transaction {
                 .add("sender", sender)
                 .add("recipient", recipient)
                 .add("amount", amount)
-                .add("happened", happened)
+                .add("timestamp", timestamp)
                 .toString();
     }
 }

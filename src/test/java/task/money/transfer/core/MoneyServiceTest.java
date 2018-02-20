@@ -10,9 +10,9 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import task.money.transfer.api.Account;
-import task.money.transfer.api.ApiResponse;
-import task.money.transfer.api.ErrorApiResponse;
 import task.money.transfer.api.err.ErrorCodes;
+import task.money.transfer.api.resp.ApiResponse;
+import task.money.transfer.api.resp.ErrorApiResponse;
 import task.money.transfer.db.AccountDao;
 import task.money.transfer.db.TransactionDao;
 

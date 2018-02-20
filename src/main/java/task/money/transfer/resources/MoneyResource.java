@@ -9,10 +9,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import task.money.transfer.api.ApiResponse;
-import task.money.transfer.api.MoneyDepositRequest;
-import task.money.transfer.api.MoneyTransferRequest;
-import task.money.transfer.api.MoneyWithdrawRequest;
+import task.money.transfer.api.req.MoneyDepositRequest;
+import task.money.transfer.api.req.MoneyTransferRequest;
+import task.money.transfer.api.req.MoneyWithdrawRequest;
+import task.money.transfer.api.resp.ApiResponse;
 import task.money.transfer.core.MoneyService;
 
 @Path("/money")

@@ -1,4 +1,4 @@
-package task.money.transfer.api;
+package task.money.transfer.api.req;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.validation.constraints.Min;

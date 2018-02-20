@@ -8,18 +8,18 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import org.skife.jdbi.v2.TransactionIsolationLevel;
 import org.skife.jdbi.v2.sqlobject.Transaction;
 import task.money.transfer.api.Account;
-import task.money.transfer.api.ApiResponse;
+import task.money.transfer.api.resp.ApiResponse;
 import task.money.transfer.db.AccountDao;
 import task.money.transfer.db.TransactionDao;
 
-import static task.money.transfer.api.ApiResponse.failedBecause;
-import static task.money.transfer.api.ApiResponse.success;
 import static task.money.transfer.api.err.ApiErrors.accountInactive;
 import static task.money.transfer.api.err.ApiErrors.accountNotFound;
 import static task.money.transfer.api.err.ApiErrors.accountsOfDifferentCurrencies;
 import static task.money.transfer.api.err.ApiErrors.insufficientFundsToWithdraw;
 import static task.money.transfer.api.err.ApiErrors.invalidMoneyAmount;
 import static task.money.transfer.api.err.ApiErrors.sameAccount;
+import static task.money.transfer.api.resp.ApiResponse.failedBecause;
+import static task.money.transfer.api.resp.ApiResponse.success;
 
 @ParametersAreNonnullByDefault
 public class MoneyService {

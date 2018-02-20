@@ -25,6 +25,8 @@ public class TransactionMapper implements ResultSetMapper<Transaction> {
         DateTime happened = new DateTime(resultSet.getTimestamp(TransactionDao.FieldNames.HAPPENED));
         logger.debug("ResultSet: sender={} recipient={} amount={} happened={}",
                 sender, recipient, amount, happened);
+        sender = sender == 0 ? null : sender;
+        recipient = recipient == 0 ? null : recipient;
         return new Transaction(sender, recipient, amount, happened);
     }
 }

@@ -5,7 +5,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
 
 import com.codahale.metrics.health.HealthCheck;
-import task.money.transfer.api.ApiResponse;
+import task.money.transfer.api.resp.ApiResponse;
 
 @ParametersAreNonnullByDefault
 public class ApiHealthCheck extends HealthCheck {

@@ -9,11 +9,11 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import task.money.transfer.api.Account;
-import task.money.transfer.api.ApiResponse;
-import task.money.transfer.api.ErrorApiResponse;
-import task.money.transfer.api.OkApiResponse;
-import task.money.transfer.api.OpenAccountRequest;
 import task.money.transfer.api.err.ErrorCodes;
+import task.money.transfer.api.req.OpenAccountRequest;
+import task.money.transfer.api.resp.ApiResponse;
+import task.money.transfer.api.resp.ErrorApiResponse;
+import task.money.transfer.api.resp.OkApiResponse;
 import task.money.transfer.db.AccountDao;
 import task.money.transfer.db.CurrencyDao;
 

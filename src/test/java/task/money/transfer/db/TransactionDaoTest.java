@@ -13,6 +13,7 @@ import task.money.transfer.api.Transaction;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 @ParametersAreNonnullByDefault
@@ -66,6 +67,12 @@ public class TransactionDaoTest {
     }
 
     @Test
+    public void withdrawTransactionHasNullRecipient() throws Exception {
+        long trxId = transactions.add(accountOne, null, AMOUNT);
+        assertNull(transactions.getById(trxId).getRecipient());
+    }
+
+    @Test
     public void checkHistoryIsChronologicallyOrderedBackwards() throws Exception {
         for (int i = 0; i < 10; i++) {
             transactions.add(accountOne, accountTwo, AMOUNT);
@@ -74,10 +81,10 @@ public class TransactionDaoTest {
         DateTime prevTime = null;
         for (Transaction trx : history) {
             if (prevTime == null) {
-                prevTime = trx.getHappened();
+                prevTime = trx.getTimestamp();
                 continue;
             }
-            assertTrue(trx.getHappened().isBefore(prevTime));
+            assertTrue(trx.getTimestamp().isBefore(prevTime));
         }
     }
 

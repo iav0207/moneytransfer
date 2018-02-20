@@ -6,10 +6,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import task.money.transfer.api.ApiResponse;
+import task.money.transfer.api.resp.ApiResponse;
 import task.money.transfer.db.CurrencyDao;
 
-import static task.money.transfer.api.ApiResponse.success;
+import static task.money.transfer.api.resp.ApiResponse.success;
 
 @Path("/currencies")
 @Produces(MediaType.APPLICATION_JSON)

@@ -1,4 +1,4 @@
-package task.money.transfer.api;
+package task.money.transfer.api.req;
 
 import java.util.Objects;
 
@@ -10,28 +10,38 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 
 @ParametersAreNonnullByDefault
-public class MoneyWithdrawRequest {
+public class MoneyTransferRequest {
 
     @NotNull
     @Min(1)
     @JsonProperty
-    private Long accountId;
+    private Long senderAccountId;
+
+    @NotNull
+    @Min(1)
+    @JsonProperty
+    private Long recipientAccountId;
 
     @NotNull
     @Min(1)
     @JsonProperty
     private Long amountMicros;
 
-    public MoneyWithdrawRequest() {
+    public MoneyTransferRequest() {
     }
 
-    public MoneyWithdrawRequest(Long accountId, Long amountMicros) {
-        this.accountId = accountId;
+    public MoneyTransferRequest(Long senderAccountId, Long recipientAccountId, Long amountMicros) {
+        this.senderAccountId = senderAccountId;
+        this.recipientAccountId = recipientAccountId;
         this.amountMicros = amountMicros;
     }
 
-    public Long getAccountId() {
-        return accountId;
+    public Long getSenderAccountId() {
+        return senderAccountId;
+    }
+
+    public Long getRecipientAccountId() {
+        return recipientAccountId;
     }
 
     public Long getAmountMicros() {
@@ -46,20 +56,22 @@ public class MoneyWithdrawRequest {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        MoneyWithdrawRequest that = (MoneyWithdrawRequest) o;
-        return Objects.equals(accountId, that.accountId) &&
+        MoneyTransferRequest that = (MoneyTransferRequest) o;
+        return Objects.equals(senderAccountId, that.senderAccountId) &&
+                Objects.equals(recipientAccountId, that.recipientAccountId) &&
                 Objects.equals(amountMicros, that.amountMicros);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, amountMicros);
+        return Objects.hash(senderAccountId, recipientAccountId, amountMicros);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("accountId", accountId)
+                .add("senderAccountId", senderAccountId)
+                .add("recipientAccountId", recipientAccountId)
                 .add("amountMicros", amountMicros)
                 .toString();
     }

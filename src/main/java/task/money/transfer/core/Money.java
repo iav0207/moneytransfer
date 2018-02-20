@@ -21,6 +21,9 @@ public class Money implements Comparable<Money> {
 
     @SuppressWarnings("WeakerAccess")
     public static final MathContext MONEY_MATH_CONTEXT = MathContext.DECIMAL128;
+    /**
+     * Used to represent all money values as integers in the API.
+     */
     @SuppressWarnings("WeakerAccess")
     public static final int MICRO_MULTIPLIER_SCALE = 6;
     /**
@@ -72,6 +75,10 @@ public class Money implements Comparable<Money> {
         return value;
     }
 
+    /**
+     * @return Micro-money (long) value, i.e. original money amount multiplied by 10^{@value #MICRO_MULTIPLIER_SCALE}.
+     * @see #MICRO_MULTIPLIER_SCALE
+     */
     public long micros() {
         return value.scaleByPowerOfTen(MICRO_MULTIPLIER_SCALE).longValue();
     }

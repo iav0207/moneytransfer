@@ -5,7 +5,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @ParametersAreNonnullByDefault
-class OkApiResponse<T> extends ApiResponse {
+public class OkApiResponse<T> extends ApiResponse {
 
     @JsonProperty
     private T body;

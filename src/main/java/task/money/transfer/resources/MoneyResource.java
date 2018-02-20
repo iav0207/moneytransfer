@@ -22,8 +22,8 @@ public class MoneyResource {
 
     private final MoneyService delegate;
 
-    public MoneyResource(MoneyService repository) {
-        this.delegate = repository;
+    public MoneyResource(MoneyService moneyService) {
+        this.delegate = moneyService;
     }
 
     @GET
@@ -34,13 +34,13 @@ public class MoneyResource {
 
     @POST
     @Path("/deposit")
-    public ApiResponse deposit(MoneyDepositRequest req) {
+    public ApiResponse deposit(@Valid MoneyDepositRequest req) {
         return delegate.deposit(req.getAccountId(), req.getAmountMicros());
     }
 
     @POST
     @Path("/withdraw")
-    public ApiResponse withdraw(MoneyWithdrawRequest req) {
+    public ApiResponse withdraw(@Valid MoneyWithdrawRequest req) {
         return delegate.withdraw(req.getAccountId(), req.getAmountMicros());
     }
 

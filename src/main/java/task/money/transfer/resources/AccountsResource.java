@@ -38,7 +38,6 @@ public class AccountsResource {
     public ApiResponse getById(@QueryParam("id") long id) {
         return Optional.ofNullable(accounts.findById(id))
                 .map(ApiResponse::success)
-                .map(ApiResponse.class::cast)
                 .orElseGet(() -> failedBecause(accountNotFound(id)));
     }
 
@@ -46,11 +45,11 @@ public class AccountsResource {
     @Path("/open")
     public ApiResponse open(@Valid OpenAccountRequest req) {
         int currencyCode = req.getCurrency();
-        if (currencies.isSupported(currencyCode)) {
-            long newAccountId = accounts.createAccount(currencyCode);
-            return success(accounts.findById(newAccountId));
-        } else {
+        if (!currencies.isSupported(currencyCode)) {
             return failedBecause(currencyIsNotSupported(currencyCode));
         }
+
+        long newAccountId = accounts.createAccount(currencyCode);
+        return success(accounts.findById(newAccountId));
     }
 }

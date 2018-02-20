@@ -4,6 +4,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import task.money.transfer.api.err.ApiError;
 
+/**
+ * Basic DTO returned by all API resources' methods.
+ */
 @ParametersAreNonnullByDefault
 public abstract class ApiResponse {
 

@@ -75,6 +75,14 @@ public class Money implements Comparable<Money> {
         return value.scaleByPowerOfTen(MICRO_MULTIPLIER_SCALE).longValue();
     }
 
+    /**
+     * @return {@code true}, if this instance represents a valid amount of money,
+     * i.e. amount greater than <i>cent scale</i>.
+     */
+    public boolean isValidValue() {
+        return value.scaleByPowerOfTen(MONEY_CENT_SCALE).remainder(BigDecimal.ONE).compareTo(BigDecimal.ZERO) == 0;
+    }
+
     public Money add(Money that) {
         checkArgument(that.currencyCode == currencyCode,
                 "Can't calculate money in different currencies");

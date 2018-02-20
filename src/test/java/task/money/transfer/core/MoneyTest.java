@@ -120,4 +120,24 @@ public class MoneyTest {
         assertEquals(Money.valueOf(10.123_456_789, CURR_1).micros(), 10_123_456);
     }
 
+    @Test(dataProvider = "isValid")
+    public void checkIsValidValue(double val, boolean expected) {
+        assertEquals(Money.valueOf(val, CURR_1).isValidValue(), expected);
+    }
+
+    @DataProvider(name = "isValid")
+    public static Object[][] validDp() {
+        return new Object[][] {
+                {1, true},
+                {0.1, true},
+                {0.01, true},
+                {0.011, false},
+                {0.0095, false},
+                {10.007, false},
+                {0.0001, false},
+                {0, true},
+                {-1, true},
+                {-1.003, false},
+        };
+    }
 }

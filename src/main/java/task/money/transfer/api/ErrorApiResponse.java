@@ -5,7 +5,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @ParametersAreNonnullByDefault
-class ErrorApiResponse extends ApiResponse {
+public class ErrorApiResponse extends ApiResponse {
 
     @JsonProperty
     private int errorCode;

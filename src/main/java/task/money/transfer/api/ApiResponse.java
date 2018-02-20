@@ -21,6 +21,10 @@ public abstract class ApiResponse {
         this.status = status;
     }
 
+    public static ApiResponse success() {
+        return new OkApiResponse<>();
+    }
+
     public static <T> ApiResponse success(T body) {
         return new OkApiResponse<>(body);
     }

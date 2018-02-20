@@ -6,11 +6,9 @@ from collections import defaultdict
 
 import requests
 
-config = {
-    'base_url': 'http://localhost:8080'
-}
+base_url = 'http://localhost:8080'
 
-log = logging.getLogger('test-api-logger')
+log = logging.getLogger('api-demo-logger')
 log.addHandler(logging.StreamHandler())
 log.setLevel('INFO')
 
@@ -18,7 +16,7 @@ errors = []
 
 
 def uri(path):
-    return urllib.parse.urljoin(config['base_url'], path)
+    return urllib.parse.urljoin(base_url, path)
 
 
 def assert_that(msg, condition):

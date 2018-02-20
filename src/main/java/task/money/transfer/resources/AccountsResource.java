@@ -13,8 +13,8 @@ import javax.ws.rs.core.MediaType;
 
 import task.money.transfer.api.req.OpenAccountRequest;
 import task.money.transfer.api.resp.ApiResponse;
-import task.money.transfer.db.AccountDao;
-import task.money.transfer.db.CurrencyDao;
+import task.money.transfer.db.account.AccountDao;
+import task.money.transfer.db.currency.CurrencyDao;
 
 import static task.money.transfer.api.err.ApiErrors.accountNotFound;
 import static task.money.transfer.api.err.ApiErrors.currencyIsNotSupported;

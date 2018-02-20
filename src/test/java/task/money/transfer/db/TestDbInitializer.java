@@ -8,6 +8,13 @@ import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Environment;
 import org.skife.jdbi.v2.DBI;
+import task.money.transfer.db.account.AccountDao;
+import task.money.transfer.db.account.AccountMapper;
+import task.money.transfer.db.currency.CurrenciesInitializer;
+import task.money.transfer.db.currency.CurrencyDao;
+import task.money.transfer.db.currency.CurrencyMapper;
+import task.money.transfer.db.transaction.TransactionDao;
+import task.money.transfer.db.transaction.TransactionMapper;
 
 @ParametersAreNonnullByDefault
 public class TestDbInitializer {

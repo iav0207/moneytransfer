@@ -1,4 +1,4 @@
-package task.money.transfer.db;
+package task.money.transfer.db.transaction;
 
 import java.util.List;
 

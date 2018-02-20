@@ -8,6 +8,7 @@ import org.skife.jdbi.v2.DBI;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import task.money.transfer.api.Account;
+import task.money.transfer.db.account.AccountDao;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;

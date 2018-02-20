@@ -14,8 +14,8 @@ import task.money.transfer.api.req.OpenAccountRequest;
 import task.money.transfer.api.resp.ApiResponse;
 import task.money.transfer.api.resp.ErrorApiResponse;
 import task.money.transfer.api.resp.OkApiResponse;
-import task.money.transfer.db.AccountDao;
-import task.money.transfer.db.CurrencyDao;
+import task.money.transfer.db.account.AccountDao;
+import task.money.transfer.db.currency.CurrencyDao;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;

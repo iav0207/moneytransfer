@@ -9,8 +9,8 @@ import org.skife.jdbi.v2.TransactionIsolationLevel;
 import org.skife.jdbi.v2.sqlobject.Transaction;
 import task.money.transfer.api.Account;
 import task.money.transfer.api.resp.ApiResponse;
-import task.money.transfer.db.AccountDao;
-import task.money.transfer.db.TransactionDao;
+import task.money.transfer.db.account.AccountDao;
+import task.money.transfer.db.transaction.TransactionDao;
 
 import static task.money.transfer.api.err.ApiErrors.accountInactive;
 import static task.money.transfer.api.err.ApiErrors.accountNotFound;

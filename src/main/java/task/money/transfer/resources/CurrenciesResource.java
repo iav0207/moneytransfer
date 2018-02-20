@@ -7,7 +7,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import task.money.transfer.api.resp.ApiResponse;
-import task.money.transfer.db.CurrencyDao;
+import task.money.transfer.db.currency.CurrencyDao;
 
 import static task.money.transfer.api.resp.ApiResponse.success;
 

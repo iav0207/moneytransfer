@@ -13,8 +13,8 @@ import task.money.transfer.api.Account;
 import task.money.transfer.api.err.ErrorCodes;
 import task.money.transfer.api.resp.ApiResponse;
 import task.money.transfer.api.resp.ErrorApiResponse;
-import task.money.transfer.db.AccountDao;
-import task.money.transfer.db.TransactionDao;
+import task.money.transfer.db.account.AccountDao;
+import task.money.transfer.db.transaction.TransactionDao;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;

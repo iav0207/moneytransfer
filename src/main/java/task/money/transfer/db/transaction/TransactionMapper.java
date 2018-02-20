@@ -1,4 +1,4 @@
-package task.money.transfer.db;
+package task.money.transfer.db.transaction;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

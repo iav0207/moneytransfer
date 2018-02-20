@@ -25,11 +25,12 @@ public class Money implements Comparable<Money> {
     public static final int MICRO_MULTIPLIER_SCALE = 6;
     /**
      * Decimal places.
+     * <p>
+     * In fact, it is a property of currencies. But now there are only few currencies supported,
+     * so for simplicity the value is hardcoded.
      */
     @SuppressWarnings("WeakerAccess")
     public static final int MONEY_CENT_SCALE = 2;
-    @SuppressWarnings("WeakerAccess")
-    public static final BigDecimal MICRO_MULTIPLIER = BigDecimal.valueOf(1, -MICRO_MULTIPLIER_SCALE);
 
     private final BigDecimal value;
     private final int currencyCode;

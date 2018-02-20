@@ -1,6 +1,8 @@
 # MoneyApp
 This is a solution to coding task, not a real app.
 
+[![Build Status](https://travis-ci.org/iav0207/moneytransfer.svg?branch=master)](https://travis-ci.org/iav0207/moneytransfer)
+
 Description
 ---
 Implementation of RESTful API for money transfers between accounts.

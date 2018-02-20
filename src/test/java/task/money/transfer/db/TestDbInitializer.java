@@ -1,9 +1,5 @@
 package task.money.transfer.db;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.codahale.metrics.MetricRegistry;
@@ -27,15 +23,17 @@ public class TestDbInitializer {
     private static final DBI dbi = new DBIFactory().build(env, dataSourceFactory, "test");
 
     static {
+        CurrencyDao currencies = dbi.onDemand(CurrencyDao.class);
         AccountDao accounts = dbi.onDemand(AccountDao.class);
         TransactionDao transactions = dbi.onDemand(TransactionDao.class);
 
-        transactions.dropTransactionsTableSafely();
-        accounts.dropAccountsTableSafely();
-
+        currencies.createTableIfNotExists();
         accounts.createTableIfNotExists();
         transactions.createTableIfNotExists();
 
+        new CurrenciesInitializer(currencies).populateCurrencies();
+
+        dbi.registerMapper(new CurrencyMapper());
         dbi.registerMapper(new AccountMapper());
         dbi.registerMapper(new TransactionMapper());
     }
@@ -47,23 +45,7 @@ public class TestDbInitializer {
         return dataSourceFactory;
     }
 
-    public static Environment getEnv() {
-        return env;
-    }
-
-    public static DataSourceFactory getDataSourceFactory() {
-        return dataSourceFactory;
-    }
-
     public static DBI getDbi() {
         return dbi;
-    }
-
-    public static Connection getConnection() {
-        try {
-            return DriverManager.getConnection(URL);
-        } catch (SQLException e) {
-            throw new RuntimeException("Unable to get connection to db.", e);
-        }
     }
 }

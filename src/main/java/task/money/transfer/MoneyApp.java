@@ -39,9 +39,9 @@ public class MoneyApp extends Application<AppConfiguration> {
         TransactionDao transactionDao = dbi.onDemand(TransactionDao.class);
         CurrencyDao currencyDao = dbi.onDemand(CurrencyDao.class);
 
+        currencyDao.createTableIfNotExists();
         accountDao.createTableIfNotExists();
         transactionDao.createTableIfNotExists();
-        currencyDao.createTableIfNotExists();
 
         if (currencyDao.getAllSupportedCurrencies().isEmpty()) {
             new CurrenciesInitializer(currencyDao).populateCurrencies();

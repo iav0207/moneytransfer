@@ -18,8 +18,8 @@ public class DbH2Test {
     @DataProvider(name = "db-urls")
     public static Object[][] dbUrls() {
         return new Object[][] {
-                {"jdbc:h2:test:./target/db"},   // persistent db
-                {"jdbc:h2:mem:test"},           // in-memory db
+                {"jdbc:h2:./target/db/test.db"},    // persistent db
+                {"jdbc:h2:mem:test.db"},            // in-memory db
         };
     }
 

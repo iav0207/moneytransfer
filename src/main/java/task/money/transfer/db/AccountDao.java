@@ -26,7 +26,9 @@ public interface AccountDao {
         }
 
         static final String CREATE_TABLE = "create table if not exists accounts"
-                + " (id bigint primary key auto_increment, currency int, status varchar(30) default 'ACTIVE'"
+                + " (id bigint primary key auto_increment,"
+                + " currency int not null, foreign key (currency) references currencies(code),"
+                + " status varchar(30) default 'ACTIVE'"
                 + " check status in ('ACTIVE', 'SUSPENDED', 'CLOSED'));"
                 + " create index if not exists acc_curr on accounts(currency);";
         static final String DROP_TABLE = "drop table accounts if exists";

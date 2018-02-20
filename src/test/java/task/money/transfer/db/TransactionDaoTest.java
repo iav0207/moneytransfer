@@ -18,7 +18,8 @@ import static org.testng.Assert.assertTrue;
 @ParametersAreNonnullByDefault
 public class TransactionDaoTest {
 
-    private static long AMOUNT = 3_000_000;
+    private static final int USD = 840;
+    private static final long AMOUNT = 3_000_000;
 
     private AccountDao accounts;
     private TransactionDao transactions;
@@ -35,13 +36,13 @@ public class TransactionDaoTest {
 
     @BeforeMethod
     public void reset() {
-        accountOne = accounts.createAccount(1);
-        accountTwo = accounts.createAccount(1);
+        accountOne = accounts.createAccount(USD);
+        accountTwo = accounts.createAccount(USD);
     }
 
     @Test
     public void newAccountShouldHaveEmptyHistory() throws Exception {
-        long accountId = accounts.createAccount(1);
+        long accountId = accounts.createAccount(USD);
         List<Transaction> history = transactions.getHistory(accountId);
 
         assertEquals(history.size(), 0);

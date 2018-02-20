@@ -7,6 +7,9 @@ import javax.ws.rs.core.MediaType;
 import com.codahale.metrics.health.HealthCheck;
 import task.money.transfer.api.resp.ApiResponse;
 
+/**
+ * Simple check: API is responding.
+ */
 @ParametersAreNonnullByDefault
 public class ApiHealthCheck extends HealthCheck {
 

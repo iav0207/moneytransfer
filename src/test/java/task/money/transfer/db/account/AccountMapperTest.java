@@ -1,4 +1,4 @@
-package task.money.transfer.db;
+package task.money.transfer.db.account;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,8 +10,6 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import task.money.transfer.api.Account;
-import task.money.transfer.db.account.AccountDao;
-import task.money.transfer.db.account.AccountMapper;
 
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;

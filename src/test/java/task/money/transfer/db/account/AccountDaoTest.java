@@ -1,4 +1,4 @@
-package task.money.transfer.db;
+package task.money.transfer.db.account;
 
 import java.sql.SQLException;
 
@@ -8,7 +8,7 @@ import org.skife.jdbi.v2.DBI;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import task.money.transfer.api.Account;
-import task.money.transfer.db.account.AccountDao;
+import task.money.transfer.db.TestDbInitializer;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;

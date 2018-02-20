@@ -1,4 +1,4 @@
-package task.money.transfer.db;
+package task.money.transfer.db.transaction;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import task.money.transfer.api.Transaction;
+import task.money.transfer.db.TestDbInitializer;
 import task.money.transfer.db.account.AccountDao;
-import task.money.transfer.db.transaction.TransactionDao;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;

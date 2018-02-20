@@ -29,6 +29,10 @@ public class ApiErrors {
                 format("Not enough funds to withdraw %d micros from account %d.", microsRequested, account));
     }
 
+    public static ApiError accountInactive(Account account) {
+        return accountInactive(account.getId(), account.getStatus());
+    }
+
     public static ApiError accountInactive(long accountId, Account.Status status) {
         return new ApiError(INCONSISTENT_STATE, format("Account %d is %s.", accountId, status.name()));
     }

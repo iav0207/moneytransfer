@@ -1,6 +1,9 @@
 package task.money.transfer.core;
 
+import java.util.Optional;
+
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.ws.rs.QueryParam;
 
 import org.skife.jdbi.v2.TransactionIsolationLevel;
 import org.skife.jdbi.v2.sqlobject.Transaction;
@@ -19,28 +22,46 @@ import static task.money.transfer.api.err.ApiErrors.invalidMoneyAmount;
 import static task.money.transfer.api.err.ApiErrors.sameAccount;
 
 @ParametersAreNonnullByDefault
-public class TransactionsRepository {
+public class MoneyService {
 
-    private final TransactionDao transactionDao;
-    private final AccountDao accountDao;
+    private final TransactionDao transactions;
+    private final AccountDao accounts;
 
-    public TransactionsRepository(TransactionDao transactionDao, AccountDao accountDao) {
-        this.transactionDao = transactionDao;
-        this.accountDao = accountDao;
+    public MoneyService(TransactionDao transactions, AccountDao accounts) {
+        this.transactions = transactions;
+        this.accounts = accounts;
     }
 
-    @Transaction(TransactionIsolationLevel.SERIALIZABLE)
+    public ApiResponse getBalance(@QueryParam("accountId") long accountId) {
+        return Optional.ofNullable(accounts.findById(accountId))
+                .map(acc -> success(transactions.getBalance(accountId)))
+                .orElseGet(() -> failedBecause(accountNotFound(accountId)));
+    }
+
+    public ApiResponse deposit(long accountId, long amount) {
+        Account account = accounts.findById(accountId);
+        if (account == null) {
+            return failedBecause(accountNotFound(accountId));
+        }
+        Money deposit = Money.valueOfMicros(amount, account.getCurrencyCode());
+        if (!deposit.isValidValue()) {
+            return failedBecause(invalidMoneyAmount());
+        }
+        return success(transactions.add(null, accountId, deposit.micros()));
+    }
+
+    @Transaction(TransactionIsolationLevel.REPEATABLE_READ)
     public ApiResponse withdraw(long accountId, long amount) {
-        Account account = accountDao.findById(accountId);
+        Account account = accounts.findById(accountId);
 
         if (account == null) {
             return failedBecause(accountNotFound(accountId));
         }
         if (account.getStatus() != Account.Status.ACTIVE) {
-            return failedBecause(accountInactive(accountId, account.getStatus()));
+            return failedBecause(accountInactive(account));
         }
 
-        long balance = transactionDao.getBalance(accountId);
+        long balance = transactions.getBalance(accountId);
 
         if (balance < amount) {
             return failedBecause(insufficientFundsToWithdraw(accountId, amount));
@@ -52,38 +73,38 @@ public class TransactionsRepository {
             return failedBecause(invalidMoneyAmount());
         }
 
-        return success(transactionDao.add(accountId, null, money.micros()));
+        return success(transactions.add(accountId, null, money.micros()));
     }
 
-    @Transaction(TransactionIsolationLevel.SERIALIZABLE)
+    @Transaction(TransactionIsolationLevel.REPEATABLE_READ)
     public ApiResponse transfer(long senderId, long recipientId, long amount) {
         if (senderId == recipientId) {
             return failedBecause(sameAccount());
         }
 
-        Account sender = accountDao.findById(senderId);
+        Account sender = accounts.findById(senderId);
 
         if (sender == null) {
             return failedBecause(accountNotFound(senderId));
         }
         if (sender.getStatus() != Account.Status.ACTIVE) {
-            return failedBecause(accountInactive(senderId, sender.getStatus()));
+            return failedBecause(accountInactive(sender));
         }
 
-        Account recipient = accountDao.findById(recipientId);
+        Account recipient = accounts.findById(recipientId);
 
         if (recipient == null) {
             return failedBecause(accountNotFound(recipientId));
         }
         if (recipient.getStatus() != Account.Status.ACTIVE) {
-            return failedBecause(accountInactive(recipientId, recipient.getStatus()));
+            return failedBecause(accountInactive(recipient));
         }
 
         if (!sender.getCurrencyCode().equals(recipient.getCurrencyCode())) {
             return failedBecause(accountsOfDifferentCurrencies());
         }
 
-        if (transactionDao.getBalance(senderId) < amount) {
+        if (transactions.getBalance(senderId) < amount) {
             return failedBecause(insufficientFundsToWithdraw(senderId, amount));
         }
 
@@ -93,7 +114,7 @@ public class TransactionsRepository {
             return failedBecause(invalidMoneyAmount());
         }
 
-        return success(transactionDao.add(senderId, recipientId, money.micros()));
+        return success(transactions.add(senderId, recipientId, money.micros()));
     }
 
 }

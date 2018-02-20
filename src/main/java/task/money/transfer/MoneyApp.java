@@ -7,7 +7,7 @@ import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Environment;
 import org.skife.jdbi.v2.DBI;
-import task.money.transfer.core.TransactionsRepository;
+import task.money.transfer.core.MoneyService;
 import task.money.transfer.db.AccountDao;
 import task.money.transfer.db.CurrenciesInitializer;
 import task.money.transfer.db.CurrencyDao;
@@ -47,10 +47,10 @@ public class MoneyApp extends Application<AppConfiguration> {
             new CurrenciesInitializer(currencyDao).populateCurrencies();
         }
 
-        TransactionsRepository transactionsRepository = new TransactionsRepository(transactionDao, accountDao);
+        MoneyService moneyService = new MoneyService(transactionDao, accountDao);
 
         env.jersey().register(new AccountsResource(accountDao, currencyDao));
-        env.jersey().register(new MoneyResource(accountDao, transactionDao, transactionsRepository));
+        env.jersey().register(new MoneyResource(moneyService));
         env.jersey().register(new CurrenciesResource(currencyDao));
 
         Client client = new JerseyClientBuilder(env).build("ApiHealthCheckerClient");

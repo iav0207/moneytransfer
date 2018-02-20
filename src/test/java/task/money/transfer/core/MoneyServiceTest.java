@@ -24,7 +24,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 @ParametersAreNonnullByDefault
-public class TransactionsRepositoryTest {
+public class MoneyServiceTest {
 
     private static final int CURR_1 = 1;
     private static final int CURR_2 = 2;
@@ -36,7 +36,7 @@ public class TransactionsRepositoryTest {
     private TransactionDao transactions;
 
     @InjectMocks
-    private TransactionsRepository repo;
+    private MoneyService service;
 
     private final long accountIdOne = 222;
     private final long accountIdTwo = 555;
@@ -67,7 +67,7 @@ public class TransactionsRepositoryTest {
     @Test
     public void withdraw_accountNotFound() throws Exception {
         letAccountDaoReturn(accountIdOne, null);
-        result = repo.withdraw(accountIdOne, amount);
+        result = service.withdraw(accountIdOne, amount);
 
         expectError(ErrorCodes.OBJECT_NOT_FOUND);
     }
@@ -75,7 +75,7 @@ public class TransactionsRepositoryTest {
     @Test
     public void withdraw_accountClosed() throws Exception {
         letAccountDaoReturn(accountIdOne, new Account(accountIdOne, CURR_1, Account.Status.CLOSED));
-        result = repo.withdraw(accountIdOne, amount);
+        result = service.withdraw(accountIdOne, amount);
 
         expectError(ErrorCodes.INCONSISTENT_STATE);
     }
@@ -83,21 +83,21 @@ public class TransactionsRepositoryTest {
     @Test
     public void withdraw_lowBalance() throws Exception {
         setBalance(accountIdOne, amount - 1);
-        result = repo.withdraw(accountIdOne, amount);
+        result = service.withdraw(accountIdOne, amount);
 
         expectError(ErrorCodes.INSUFFICIENT_FUNDS);
     }
 
     @Test
     public void withdraw_invalidAmount() throws Exception {
-        result = repo.withdraw(accountIdOne, amount - 3);
+        result = service.withdraw(accountIdOne, amount - 3);
 
         expectError(ErrorCodes.INVALID_USE_OF_FIELD);
     }
 
     @Test
     public void withdraw_ok() throws Exception {
-        result = repo.withdraw(accountIdOne, amount);
+        result = service.withdraw(accountIdOne, amount);
 
         expectSuccess();
     }
@@ -174,7 +174,7 @@ public class TransactionsRepositoryTest {
     }
 
     private void transfer(long amount) {
-        result = repo.transfer(accountIdOne, accountIdTwo, amount);
+        result = service.transfer(accountIdOne, accountIdTwo, amount);
     }
 
     private void letAccountDaoReturn(long accountId, @Nullable Account account) {

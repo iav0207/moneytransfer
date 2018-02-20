@@ -25,6 +25,10 @@ public interface TransactionDao {
     @Mapper(TransactionMapper.class)
     List<Transaction> getHistory(@Bind("accountid") long accountId);   // TODO pagination? limit/offset
 
+    @SqlQuery(SQL.GET_BY_ID)
+    @Mapper(TransactionMapper.class)
+    Transaction getById(@Bind(FieldNames.ID) long id);
+
     @SqlUpdate(SQL.INSERT)
     @GetGeneratedKeys
     long add(@Bind(FieldNames.SENDER) @Nullable Long sender,
@@ -53,7 +57,7 @@ public interface TransactionDao {
                 + " (id bigint primary key auto_increment,"
                 + " sender bigint default null, foreign key (sender) references accounts(id),"
                 + " recipient bigint default null, foreign key (recipient) references accounts(id),"
-                + " amount bigint not null,"
+                + " amount bigint not null, check amount > 0,"
                 + " happened timestamp not null default now());"
                 + " create index if not exists trx_snd_id on transactions(sender);"
                 + " create index if not exists trx_rcp_id on transactions(recipient);"
@@ -66,8 +70,10 @@ public interface TransactionDao {
                 + " from transactions where sender = :accountid or recipient = :accountid"
                 + " order by happened desc;";
         static final String GET_BALANCE = "select"
-                + " sum(casewhen(recipient = :accountid, amount, 0))"   // not sure if it's optimal for h2
+                + " sum(casewhen(recipient = :accountid, amount, 0))"
                 + " - sum(casewhen(sender = :accountid, amount, 0))"
                 + " from transactions";
+        static final String GET_BY_ID = "select id, sender, recipient, amount, happened"
+                + " from transactions where id = :id;";
     }
 }

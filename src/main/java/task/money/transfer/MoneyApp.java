@@ -13,7 +13,6 @@ import task.money.transfer.db.CurrenciesInitializer;
 import task.money.transfer.db.CurrencyDao;
 import task.money.transfer.db.TransactionDao;
 import task.money.transfer.health.ApiHealthCheck;
-import task.money.transfer.health.DatabaseHealthCheck;
 import task.money.transfer.resources.AccountsResource;
 import task.money.transfer.resources.CurrenciesResource;
 import task.money.transfer.resources.MoneyResource;
@@ -31,8 +30,6 @@ public class MoneyApp extends Application<AppConfiguration> {
 
     @Override
     public void run(AppConfiguration config, Environment env) {
-        env.healthChecks().register("db-health", new DatabaseHealthCheck(config.getDataSourceFactory()));
-
         DBI dbi = new DBIFactory().build(env, config.getDataSourceFactory(), "h2");
 
         AccountDao accountDao = dbi.onDemand(AccountDao.class);
@@ -53,7 +50,7 @@ public class MoneyApp extends Application<AppConfiguration> {
         env.jersey().register(new MoneyResource(moneyService));
         env.jersey().register(new CurrenciesResource(currencyDao));
 
-        Client client = new JerseyClientBuilder(env).build("ApiHealthCheckerClient");
+        Client client = new JerseyClientBuilder(env).build("EndpointHealthCheckerClient");
         env.jersey().register(new ApiHealthCheck(client));
     }
 

@@ -3,7 +3,6 @@ package task.money.transfer.core;
 import java.util.Optional;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import javax.ws.rs.QueryParam;
 
 import org.skife.jdbi.v2.TransactionIsolationLevel;
 import org.skife.jdbi.v2.sqlobject.Transaction;
@@ -32,7 +31,7 @@ public class MoneyService {
         this.accounts = accounts;
     }
 
-    public ApiResponse getBalance(@QueryParam("accountId") long accountId) {
+    public ApiResponse getBalance(long accountId) {
         return Optional.ofNullable(accounts.findById(accountId))
                 .map(acc -> success(transactions.getBalance(accountId)))
                 .orElseGet(() -> failedBecause(accountNotFound(accountId)));

@@ -11,6 +11,8 @@ import org.skife.jdbi.v2.sqlobject.customizers.Mapper;
 import task.money.transfer.api.Currency;
 
 /**
+ * Access to currencies classifier table.
+ * <p>
  * Currencies of different number of digits after decimal separator
  * are not supported for the sake of simplicity.
  */
@@ -19,9 +21,6 @@ public interface CurrencyDao {
 
     @SqlUpdate(SQL.CREATE_TABLE_IF_NOT_EXISTS)
     void createTableIfNotExists();
-
-    @SqlUpdate(SQL.DROP_TABLE_IF_EXISTS)
-    void dropTableSafely();
 
     @SqlUpdate(SQL.INSERT)
     void put(@Bind(FieldNames.CODE) int numCode, @Bind(FieldNames.ISO) String isoCode);
@@ -39,7 +38,6 @@ public interface CurrencyDao {
 
         static final String CREATE_TABLE_IF_NOT_EXISTS = "create table if not exists currencies"
                 + " (code int primary key, iso varchar(3) not null unique);";
-        static final String DROP_TABLE_IF_EXISTS = "drop table if exists currencies;";
         static final String CHECK_CODE_EXISTS = "select count(*) > 0 from currencies where code = :code;";
         static final String INSERT = "insert into currencies (code, iso) values (:code, :iso);";
         static final String GET_ALL = "select code, iso from currencies order by code asc";

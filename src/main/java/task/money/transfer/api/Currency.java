@@ -30,6 +30,14 @@ public class Currency {
         this.isoCode = isoCode;
     }
 
+    public Integer getNumCode() {
+        return numCode;
+    }
+
+    public String getIsoCode() {
+        return isoCode;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

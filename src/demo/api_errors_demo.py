@@ -50,7 +50,6 @@ def post(url, json):
     log.info(f'\tPOST : {url} : {json}')
     resp = requests.post(url, json=json)
     log.info(f'\tResponse: {resp.json()}')
-    assert_that('Response received', resp.json())
     return resp
 
 
@@ -58,7 +57,6 @@ def get(url):
     log.info(f'\tGET : {url}')
     resp = requests.get(url=url)
     log.info(f'\tResponse: {resp.json()}')
-    assert_that('Response received', resp)
     return resp
 
 

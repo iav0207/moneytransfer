@@ -79,7 +79,6 @@ def run():
     assert_that('Bad request code received', resp.status_code == 400)
 
     log_step('Open USD account.')
-
     resp = post(uri('accounts/open'), json={'currency': usd})
     accounts[usd].append(body(resp))
 
@@ -89,7 +88,6 @@ def run():
     accounts[usd].append(body(resp))
 
     log_step('Open RUB account.')
-
     resp = post(uri('accounts/open'), json={'currency': rub})
     assert_that('Received account currency is RUB', body(resp)['currencyCode'] == rub)
     accounts[rub].append(body(resp))
@@ -106,7 +104,7 @@ def run():
         'amountMicros': micro(10)
     })
 
-    log_step('Try to send more that one has got.')
+    log_step('Try to send more than one has got.')
     assert_error(post(uri('money/transfer'), json={
         'senderAccountId': accounts[usd][0]['id'],
         'recipientAccountId': accounts[usd][1]['id'],

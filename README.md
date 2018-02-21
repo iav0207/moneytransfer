@@ -15,6 +15,7 @@ Technical info
 - The project is written in Dropwizard framework, which uses embedded
 Jetty server, Jersey HTTP client, Jackson for serialization.
 - No ORM framework was used. Data access implemented via JDBI / SQL Object interface.
+- No DI framework.
 - DBMS: in-memory H2 DB.
 - Testing: TestNG + Mockito.
 
@@ -37,5 +38,7 @@ Run it!
 ---
 1. Run `mvn clean install` to build the application
 1. Start application with `java -jar target/money-transfer-1.0-SNAPSHOT.jar server config.yml`
-1. To see an API workflow demo run `python3 src/demo/api_workflow_demo.py`.
-Or see [script](src/demo/api_workflow_demo.py) and its [output example](https://paste.ee/p/zuUJm)
+1. Run demo:
+    - To see API workflow demo run `python3 src/demo/api_workflow_demo.py`.
+Or see [script](src/demo/api_workflow_demo.py) and its [output example](https://paste.ee/p/zuUJm).
+It also illustrates request/response structures.

@@ -78,7 +78,7 @@ public class MoneyService {
      * <li>insufficient funds on the account</li>
      * </ul>
      */
-    @Transaction(TransactionIsolationLevel.REPEATABLE_READ)
+    @Transaction(TransactionIsolationLevel.READ_UNCOMMITTED)
     public ApiResponse withdraw(long accountId, long amount) {
         Account account = accounts.findById(accountId);
 
@@ -119,7 +119,7 @@ public class MoneyService {
      * <li>insufficient funds on the sender's account</li>
      * </ul>
      */
-    @Transaction(TransactionIsolationLevel.REPEATABLE_READ)
+    @Transaction(TransactionIsolationLevel.READ_UNCOMMITTED)
     public ApiResponse transfer(long senderId, long recipientId, long amount) {
         if (senderId == recipientId) {
             return failedBecause(sameAccount());

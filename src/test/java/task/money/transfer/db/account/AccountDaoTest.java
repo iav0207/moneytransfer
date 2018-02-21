@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import task.money.transfer.api.Account;
 import task.money.transfer.db.TestDbInitializer;
 
+import static com.google.common.base.Preconditions.checkState;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotNull;
@@ -48,6 +49,16 @@ public class AccountDaoTest {
     @Test
     public void tryGetNonExistentAccount() throws Exception {
         assertNull(dao.findById(787L));
+    }
+
+    @Test
+    public void updateStatus() throws Exception {
+        long id = dao.createAccount(USD);
+        checkState(dao.findById(id).getStatus() == Account.Status.ACTIVE);
+
+        dao.updateStatus(id, Account.Status.SUSPENDED.name());
+
+        assertEquals(dao.findById(id).getStatus(), Account.Status.SUSPENDED);
     }
 
 }

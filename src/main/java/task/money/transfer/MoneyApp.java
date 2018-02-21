@@ -46,7 +46,7 @@ public class MoneyApp extends Application<AppConfiguration> {
 
         MoneyService moneyService = new MoneyService(transactionDao, accountDao);
 
-        env.jersey().register(new AccountsResource(accountDao, currencyDao));
+        env.jersey().register(new AccountsResource(accountDao, currencyDao, transactionDao));
         env.jersey().register(new MoneyResource(moneyService));
         env.jersey().register(new CurrenciesResource(currencyDao));
 

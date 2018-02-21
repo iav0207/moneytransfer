@@ -10,12 +10,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import task.money.transfer.api.Account;
 import task.money.transfer.api.err.ErrorCodes;
+import task.money.transfer.api.req.CloseAccountRequest;
 import task.money.transfer.api.req.OpenAccountRequest;
 import task.money.transfer.api.resp.ApiResponse;
 import task.money.transfer.api.resp.ErrorApiResponse;
 import task.money.transfer.api.resp.OkApiResponse;
 import task.money.transfer.db.account.AccountDao;
 import task.money.transfer.db.currency.CurrencyDao;
+import task.money.transfer.db.transaction.TransactionDao;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -33,6 +35,9 @@ public class AccountsResourceTest {
     @Mock
     private AccountDao accounts;
 
+    @Mock
+    private TransactionDao transactions;
+
     @InjectMocks
     private AccountsResource resource;
 
@@ -45,7 +50,7 @@ public class AccountsResourceTest {
 
     @BeforeMethod
     public void reset() {
-        Mockito.reset(currencies, accounts);
+        Mockito.reset(currencies, accounts, transactions);
     }
 
     @Test
@@ -85,12 +90,47 @@ public class AccountsResourceTest {
         expectOkResponse();
     }
 
+    @Test
+    public void close_accountNotFound_Fail() {
+        long accountId = 3L;
+        when(accounts.findById(eq(accountId))).thenReturn(null);
+        close(accountId);
+
+        expectError(ErrorCodes.OBJECT_NOT_FOUND);
+    }
+
+    @Test
+    public void close_accountBalanceNonZero_Fail() {
+        long accountId = 18L;
+        Account found = mock(Account.class);
+        when(accounts.findById(eq(accountId))).thenReturn(found);
+        when(transactions.getBalance(eq(accountId))).thenReturn(1L);
+
+        close(accountId);
+        expectError(ErrorCodes.INCONSISTENT_STATE);
+    }
+
+    @Test
+    public void close_zeroBalance_Ok() {
+        long accountId = 3L;
+        Account found = mock(Account.class);
+        when(accounts.findById(eq(accountId))).thenReturn(found);
+        when(transactions.getBalance(eq(accountId))).thenReturn(0L);
+
+        close(accountId);
+        expectOkResponseWithBody(found);
+    }
+
     private void getById(long id) {
         result = resource.getById(id);
     }
 
     private void open(int currency) {
         result = resource.open(new OpenAccountRequest(currency));
+    }
+
+    private void close(long id) {
+        result = resource.close(new CloseAccountRequest(id));
     }
 
     private void expectError(int errorCode) {

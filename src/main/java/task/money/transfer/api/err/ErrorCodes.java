@@ -13,5 +13,5 @@ public class ErrorCodes {
 
     public static final int INCONSISTENT_STATE = 6002;
 
-    public static final int INVALID_USE_OF_FIELD = 5000;
+    public static final int INVALID_VALUE = 5000;
 }

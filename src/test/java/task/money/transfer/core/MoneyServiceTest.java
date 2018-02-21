@@ -92,7 +92,7 @@ public class MoneyServiceTest {
     public void withdraw_invalidAmount() throws Exception {
         result = service.withdraw(accountIdOne, amount - 3);
 
-        expectError(ErrorCodes.INVALID_USE_OF_FIELD);
+        expectError(ErrorCodes.INVALID_VALUE);
     }
 
     @Test
@@ -154,7 +154,7 @@ public class MoneyServiceTest {
     public void transfer_invalidAmount() throws Exception {
         transfer(amount - 117);
 
-        expectError(ErrorCodes.INVALID_USE_OF_FIELD);
+        expectError(ErrorCodes.INVALID_VALUE);
     }
 
     @Test

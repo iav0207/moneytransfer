@@ -119,6 +119,11 @@ def run():
     resp = get(uri(f'money/balance?accountId={accounts[usd][1]["id"]}'))
     assert_that('Balance changed to zero', body(resp) == 0)
 
+    log.info('Close account.')
+
+    resp = post(uri('accounts/close'), json={'accountId': accounts[usd][1]['id']})
+    assert_that('Response status is OK', status(resp) == 'OK')
+
     assert not errors, 'Failed on assertions:\n\n' + '\n'.join(errors)
 
     log.info('\nSuccess.')

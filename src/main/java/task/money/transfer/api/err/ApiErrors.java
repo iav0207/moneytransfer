@@ -7,7 +7,7 @@ import task.money.transfer.api.Account;
 import static java.lang.String.format;
 import static task.money.transfer.api.err.ErrorCodes.INCONSISTENT_STATE;
 import static task.money.transfer.api.err.ErrorCodes.INSUFFICIENT_FUNDS;
-import static task.money.transfer.api.err.ErrorCodes.INVALID_USE_OF_FIELD;
+import static task.money.transfer.api.err.ErrorCodes.INVALID_VALUE;
 import static task.money.transfer.api.err.ErrorCodes.OBJECT_NOT_FOUND;
 
 @ParametersAreNonnullByDefault
@@ -29,6 +29,10 @@ public class ApiErrors {
                 format("Not enough funds to withdraw %d micros from account %d.", microsRequested, account));
     }
 
+    public static ApiError accountBalanceIsNonZero() {
+        return new ApiError(INCONSISTENT_STATE, "Account balance is non-zero. Withdraw first.");
+    }
+
     public static ApiError accountInactive(Account account) {
         return accountInactive(account.getId(), account.getStatus());
     }
@@ -42,11 +46,11 @@ public class ApiErrors {
     }
 
     public static ApiError sameAccount() {
-        return new ApiError(INVALID_USE_OF_FIELD, "Accounts should be distinct");
+        return new ApiError(INVALID_VALUE, "Accounts should be distinct");
     }
 
     public static ApiError invalidMoneyAmount() {
-        return new ApiError(INVALID_USE_OF_FIELD, "Invalid value: money amount");
+        return new ApiError(INVALID_VALUE, "Invalid value: money amount");
     }
 
 }

@@ -9,6 +9,9 @@ import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.Mapper;
 import task.money.transfer.api.Account;
 
+/**
+ * Access to accounts database table.
+ */
 @ParametersAreNonnullByDefault
 public interface AccountDao {
 

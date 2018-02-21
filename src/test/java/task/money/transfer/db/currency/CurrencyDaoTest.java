@@ -1,12 +1,12 @@
 package task.money.transfer.db.currency;
 
-import java.sql.SQLException;
 import java.util.Map;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Maps;
 import org.skife.jdbi.v2.DBI;
+import org.skife.jdbi.v2.exceptions.UnableToExecuteStatementException;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import task.money.transfer.api.Currency;
@@ -34,7 +34,7 @@ public class CurrencyDaoTest {
         assertTrue(dao.isSupported(111));
     }
 
-    @Test(expectedExceptions = SQLException.class)
+    @Test(expectedExceptions = UnableToExecuteStatementException.class)
     public void cannotPutLongStringAsIso() {
         dao.put(222, "ABRA");
     }

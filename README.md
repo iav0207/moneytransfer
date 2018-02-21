@@ -36,6 +36,15 @@ POST    /money/withdraw     - withdraw funds from account
 For money representation in the API 'micro-money' is used,
 e.g. `1.50` USD is represented by number `1_500_000` for USD account.
 
+Project structure
+---
+- [api](src/main/java/task/money/transfer/api) – API objects (JSON models),
+such as requests, responses and domain model objects; and error codes as well.
+- [core](src/main/java/task/money/transfer/core) – money model and core transactional operations.
+- [db](src/main/java/task/money/transfer/db) – data access layer.
+- [health](src/main/java/task/money/transfer/health) – smoke startup health check.
+- [resources](src/main/java/task/money/transfer/resources) – REST endpoints.
+
 Run it!
 ---
 1. Run `mvn clean install` to build the application

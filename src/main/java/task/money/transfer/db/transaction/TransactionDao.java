@@ -18,9 +18,6 @@ public interface TransactionDao {
     @SqlUpdate(SQL.CREATE_TABLE_IF_NOT_EXISTS)
     void createTableIfNotExists();
 
-    @SqlUpdate(SQL.DROP_TABLE_IF_EXISTS)
-    void dropTransactionsTableSafely();
-
     @SqlQuery(SQL.GET_ALL_BY_ACC_ID)
     @Mapper(TransactionMapper.class)
     List<Transaction> getHistory(@Bind("accountid") long accountId);   // TODO pagination? limit/offset

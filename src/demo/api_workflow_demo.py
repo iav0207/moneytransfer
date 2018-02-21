@@ -15,6 +15,10 @@ log.setLevel('INFO')
 errors = []
 
 
+def log_step(msg):
+    log.info('\n' + msg)
+
+
 def uri(path):
     return urllib.parse.urljoin(base_url, path)
 
@@ -53,46 +57,46 @@ def micro(money):
 
 
 def run():
-    log.info('\nDemo flow started.\n')
+    log_step('Demo flow started.')
 
     accounts = defaultdict(list)
     usd = 840
     rub = 643
 
-    log.info('Get list of supported currencies.')
+    log_step('Get list of supported currencies.')
 
     get(uri('currencies/list'))
 
-    log.info('Open USD account.')
+    log_step('Open USD account.')
 
     resp = post(uri('accounts/open'), json={'currency': usd})
     accounts[usd].append(body(resp))
 
-    log.info('Get just created account.')
+    log_step('Get just created account.')
 
     resp = get(uri(f'accounts?id={accounts[usd][0]["id"]}'))
     assert_that('Received account currency is USD', body(resp)['currencyCode'] == usd)
 
-    log.info('Create another USD account.')
+    log_step('Create another USD account.')
 
     resp = post(uri('accounts/open'), json={'currency': usd})
     assert_that('Account has different id', body(resp)['id'] != accounts[usd][0]['id'])
     accounts[usd].append(body(resp))
 
-    log.info('Create RUB account.')
+    log_step('Create RUB account.')
 
     resp = post(uri('accounts/open'), json={'currency': rub})
     assert_that('Received account currency is RUB', body(resp)['currencyCode'] == rub)
     accounts[rub].append(body(resp))
 
-    log.info('Deposit 10 USD.')
+    log_step('Deposit 10 USD.')
 
     post(uri('money/deposit'), json={
         'accountId': accounts[usd][0]['id'],
         'amountMicros': micro(10)
     })
 
-    log.info('Transfer 3 USD to another account.')
+    log_step('Transfer 3 USD to another account.')
 
     resp = post(uri('money/transfer'), json={
         'senderAccountId': accounts[usd][0]['id'],
@@ -101,7 +105,7 @@ def run():
     })
     assert_that('Transfer response status was OK', status(resp) == 'OK')
 
-    log.info('Check balances.')
+    log_step('Check balances.')
 
     resp = get(uri(f'money/balance?accountId={accounts[usd][0]["id"]}'))
     assert_that('First account balance is 7 USD', body(resp) == micro(7))
@@ -109,7 +113,7 @@ def run():
     resp = get(uri(f'money/balance?accountId={accounts[usd][1]["id"]}'))
     assert_that('Second account balance is 3 USD', body(resp) == micro(3))
 
-    log.info('Withdraw.')
+    log_step('Withdraw.')
 
     resp = post(uri('money/withdraw'), json={
         'accountId': accounts[usd][1]['id'],
@@ -119,14 +123,14 @@ def run():
     resp = get(uri(f'money/balance?accountId={accounts[usd][1]["id"]}'))
     assert_that('Balance changed to zero', body(resp) == 0)
 
-    log.info('Close account.')
+    log_step('Close account.')
 
     resp = post(uri('accounts/close'), json={'accountId': accounts[usd][1]['id']})
     assert_that('Response status is OK', status(resp) == 'OK')
 
     assert not errors, 'Failed on assertions:\n\n' + '\n'.join(errors)
 
-    log.info('\nSuccess.')
+    log_step('Success.')
 
 
 if __name__ == '__main__':

@@ -1,16 +1,15 @@
 package task.money.transfer.core;
 
 import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import de.jkeylockmanager.manager.KeyLockManager;
+import de.jkeylockmanager.manager.KeyLockManagers;
 import org.skife.jdbi.v2.TransactionIsolationLevel;
 import org.skife.jdbi.v2.sqlobject.Transaction;
 import task.money.transfer.api.Account;
-import task.money.transfer.api.err.ApiError;
 import task.money.transfer.api.resp.ApiResponse;
 import task.money.transfer.db.account.AccountDao;
 import task.money.transfer.db.transaction.TransactionDao;
@@ -30,7 +29,7 @@ public class MoneyService {
     private final TransactionDao transactions;
     private final AccountDao accounts;
 
-    private final Set<Long> locks = ConcurrentHashMap.newKeySet();
+    private final KeyLockManager lockManager = KeyLockManagers.newLock();
 
     public MoneyService(TransactionDao transactions, AccountDao accounts) {
         this.transactions = transactions;
@@ -85,6 +84,10 @@ public class MoneyService {
      */
     @Transaction(TransactionIsolationLevel.READ_UNCOMMITTED)
     public ApiResponse withdraw(long accountId, long amount) {
+        return lockManager.executeLocked(accountId, () -> withdrawSafely(accountId, amount));
+    }
+
+    private ApiResponse withdrawSafely(long accountId, long amount) {
         Account account = accounts.findById(accountId);
 
         if (account == null) {
@@ -94,17 +97,15 @@ public class MoneyService {
             return failedBecause(accountInactive(account));
         }
 
-        while (!locks.add(accountId));
-
         Money balance = Money.valueOfMicros(transactions.getBalance(accountId), account.getCurrencyCode());
         Money moneyToWithdraw = Money.valueOfMicros(amount, account.getCurrencyCode());
 
         if (balance.compareTo(moneyToWithdraw) < 0) {
-            return unlockAndFail(accountId, insufficientFundsToWithdraw(accountId, amount));
+            return failedBecause(insufficientFundsToWithdraw(accountId, amount));
         }
 
         if (!moneyToWithdraw.isValidValue() || amount <= 0) {
-            return unlockAndFail(accountId, invalidMoneyAmount());
+            return failedBecause(invalidMoneyAmount());
         }
 
         return success(commit(accountId, null, moneyToWithdraw.micros()));
@@ -128,6 +129,10 @@ public class MoneyService {
      */
     @Transaction(TransactionIsolationLevel.READ_UNCOMMITTED)
     public ApiResponse transfer(long senderId, long recipientId, long amount) {
+        return lockManager.executeLocked(senderId, () -> transferSafely(senderId, recipientId, amount));
+    }
+
+    private ApiResponse transferSafely(long senderId, long recipientId, long amount) {
         if (senderId == recipientId) {
             return failedBecause(sameAccount());
         }
@@ -154,33 +159,23 @@ public class MoneyService {
             return failedBecause(accountsOfDifferentCurrencies());
         }
 
-        while (!locks.add(senderId));
-
         if (transactions.getBalance(senderId) < amount) {
-            return unlockAndFail(senderId, insufficientFundsToWithdraw(senderId, amount));
+            return failedBecause(insufficientFundsToWithdraw(senderId, amount));
         }
 
         Money money = Money.valueOfMicros(amount, sender.getCurrencyCode());
 
         if (!money.isValidValue() || amount <= 0) {
-            return unlockAndFail(senderId, invalidMoneyAmount());
+            return failedBecause(invalidMoneyAmount());
         }
 
         return success(commit(senderId, recipientId, money.micros()));
-    }
-
-    private ApiResponse unlockAndFail(long accountToUnlock, ApiError cause) {
-        locks.remove(accountToUnlock);
-        return failedBecause(cause);
     }
 
     private task.money.transfer.api.Transaction commit(@Nullable Long senderId, @Nullable Long recipientId,
             long micros)
     {
         long trxId = transactions.add(senderId, recipientId, micros);
-        if (senderId != null) {
-            locks.remove(senderId);
-        }
         return transactions.getById(trxId);
     }
 
